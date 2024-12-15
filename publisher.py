@@ -13,4 +13,4 @@ def publisher():
         print("notification sent!")
 
 if __name__=="__main__":
-    subscriber()
+    publisher()
