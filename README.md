@@ -2,13 +2,12 @@
 
 ## Overview
 
-This project implements a **Real-Time Notification System** using Redis, Python, and Flask. The system enables users to send, receive, and manage notifications with support for:
+This project implements a **Real-Time Notification System** using Redis, Python. The system enables users to send, receive, and manage notifications with support for:
 
 - **Real-time delivery** using Redis Pub/Sub.
 - **Prioritization** with High, Medium, and Low priority levels.
 - **Notification history** for each channel and priority.
 - **Automatic expiration** of old notifications.
-- A **web interface** for managing and retrieving notifications.
 
 ## Features
 
@@ -48,7 +47,7 @@ This project implements a **Real-Time Notification System** using Redis, Python,
 2. **Python 3.8+**
    Install the necessary Python packages:
    ```bash
-   pip install flask flask-socketio redis
+   pip install redis
    ```
 
 ## Installation
@@ -60,12 +59,15 @@ This project implements a **Real-Time Notification System** using Redis, Python,
    cd <repository-directory>
    ```
 
-2. Start the Flask application:
+2. Start the system:
 
    ```bash
-   python app.py
+   python publisher.py
    ```
-
+   ```bash
+   python subscriber.py
+   ```
+   
 3. Ensure Redis is running locally or via Docker.
 
 ## Usage
@@ -74,15 +76,6 @@ This project implements a **Real-Time Notification System** using Redis, Python,
 
 #### 1. **Send Notification**
 
-- **Endpoint**: `POST /send`
-- **Request Body**:
-  ```json
-  {
-    "channel": "channel1",
-    "message": "Server is down!",
-    "priority": "high"
-  }
-  ```
 - **Description**: Sends a notification to the specified channel with the given priority.
 
 #### 2. **Retrieve Notification History**
