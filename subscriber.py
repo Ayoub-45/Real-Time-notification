@@ -1,6 +1,6 @@
 import redis
 
-def subscribe_and_retrieve_history():
+def subscribe_with_filtering():
     # Connect to Redis
     client = redis.StrictRedis(host='localhost', port=6379, decode_responses=True)
 
@@ -12,20 +12,21 @@ def subscribe_and_retrieve_history():
     channels = [channel.strip() for channel in channels]
     pubsub.subscribe(*channels)
 
+    # Allow user to set filter keywords
+    filters = input("Enter keywords to filter notifications (comma-separated): ").split(",")
+    filters = [filter.strip().lower() for filter in filters]
     print(f"Subscribed to: {', '.join(channels)}")
+    print(f"Filters applied: {', '.join(filters)}")
 
-    # Retrieve notification history for each channel
-    for channel in channels:
-        print(f"\nNotification history for '{channel}':")
-        history = client.lrange(f"history:{channel}", 0, -1)
-        for notification in history:
-            print(f"- {notification}")
-
-    # Listen for new messages
-    print("\nListening for notifications...")
+    # Listen for new messages with filtering
+    print("\nListening for filtered notifications...")
     for message in pubsub.listen():
         if message["type"] == "message":
-            print(f"New notification on '{message['channel']}': {message['data']}")
+            notification = message["data"].lower()
+            if any(keyword in notification for keyword in filters):
+                print(f"New filtered notification on '{message['channel']}': {message['data']}")
+            else:
+                print(f"Ignored notification on '{message['channel']}': {message['data']}")
 
 if __name__ == "__main__":
-    subscribe_and_retrieve_history()
+    subscribe_with_filtering()
